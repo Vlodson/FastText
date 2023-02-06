@@ -6,7 +6,7 @@ from typing import List, Tuple, Dict
 from operator import itemgetter
 
 from text_preprocesssing import preprocess_corpus
-from globals import CORPUS_PATH, VECTOR_SPACE_SIZE, LEARN_RATE, EPOCHS
+from globals import CORPUS_PATH, VECTOR_SPACE_SIZE, OPTIMIZER, LEARN_RATE, EPOCHS
 
 
 def relu(tensor: np.ndarray) -> np.ndarray:
@@ -76,7 +76,8 @@ def backward_one_word(word_vector: np.ndarray, context_matrix: np.ndarray,
     (input_2_hidden_transfer, input_2_hidden_activation),\
         (hidden_2_output_transfer, hidden_2_output_activation) = forward_results
 
-    grad_hidden_2_output_transfer = np.sum(hidden_2_output_activation - context_matrix, axis=0, keepdims=True) / context_matrix.shape[0]
+    grad_hidden_2_output_transfer =\
+        np.sum(hidden_2_output_activation - context_matrix, axis=0, keepdims=True) / context_matrix.shape[0]
     grad_hidden_2_output_weights = input_2_hidden_activation.T @ grad_hidden_2_output_transfer
 
     grad_input_2_hidden_activation = grad_hidden_2_output_transfer @ hidden_2_output_weights.T
@@ -90,27 +91,35 @@ def loss_one_word(word_output: np.ndarray, context_matrix: np.ndarray) -> float:
     """
     Calculates log loss for a single word based on its output and context
     """
-    loss = np.sum([-1*np.sum(context_word * np.log(word_output)) for context_word in context_matrix])
+    loss = np.sum(-1*(context_matrix * np.log(word_output)))
     return loss / context_matrix.shape[0]
 
 
-def update_hyperparameter(hyperparameter: np.ndarray, grad_hyperparameter: np.ndarray) -> np.ndarray:
+def update_hyperparameter(hyperparameter: np.ndarray, grad_hyperparameter: np.ndarray,
+                          m: np.ndarray, v: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
-    Does ordinary GD on the hyperparameter using learn rate from the config
+    Does ADAM optimization on hyperparameter
 
-    Returns the newly calculated hyperparameter
+    Returns the newly calculated hyperparameter and optimizer parameters
     """
-    new_hyperparameter = hyperparameter - LEARN_RATE * grad_hyperparameter
-    return new_hyperparameter
+    new_m = OPTIMIZER["omega1"] * m + (1 - OPTIMIZER["omega1"]) * grad_hyperparameter
+    new_v = OPTIMIZER["omega2"] * v + (1 - OPTIMIZER["omega2"]) * (grad_hyperparameter**2)
+
+    m_hat = new_m / (1 - OPTIMIZER["omega1"])
+    v_hat = np.abs(new_v) / (1 - OPTIMIZER["omega2"])
+
+    new_hyperparameter = hyperparameter - (LEARN_RATE / (v_hat + OPTIMIZER["norm"])**0.5) * m_hat
+    return new_hyperparameter, new_m, new_v
 
 
 def one_word_iteration(word_vector: np.ndarray, context_matrix: np.ndarray,
-                       network_hyperparameters: Tuple[np.ndarray, np.ndarray])\
-        -> Tuple[Tuple[np.ndarray, np.ndarray], float]:
+                       network_hyperparameters: Tuple[np.ndarray, np.ndarray],
+                       ms: Tuple[np.ndarray, np.ndarray], vs: Tuple[np.ndarray, np.ndarray])\
+        -> Tuple[Tuple[np.ndarray, np.ndarray], float, Tuple[np.ndarray, np.ndarray], Tuple[np.ndarray, np.ndarray]]:
     """
     Does forward pass, loss calculation, backward pass and hyperparameter optimization for one word
 
-    Returns the new hyperparameters and loss for that word
+    Returns the new hyperparameters and loss for that word, as well as the newly calculated optimizer parameters
     """
     forward_results = forward_one_word(word_vector, network_hyperparameters)
 
@@ -119,12 +128,17 @@ def one_word_iteration(word_vector: np.ndarray, context_matrix: np.ndarray,
 
     grad_hyperparameters = backward_one_word(word_vector, context_matrix, forward_results, network_hyperparameters)
 
-    new_hyperparameters = tuple(
-        update_hyperparameter(hyperparameter, grad_hyperparameter)
-        for hyperparameter, grad_hyperparameter in zip(network_hyperparameters, grad_hyperparameters)
+    input_2_hidden_updated, hidden_2_output_updated = tuple(
+        update_hyperparameter(hyperparameter, grad_hyperparameter, m, v)
+        for hyperparameter, grad_hyperparameter, m, v in zip(network_hyperparameters, grad_hyperparameters, ms, vs)
     )
 
-    return new_hyperparameters, loss
+    return (
+        (input_2_hidden_updated[0], hidden_2_output_updated[0]),
+        loss,
+        (input_2_hidden_updated[1], hidden_2_output_updated[1]),
+        (input_2_hidden_updated[2], hidden_2_output_updated[2])
+    )
 
 
 def train(word_map: Dict[str, Dict[str, np.ndarray]], plot_graph: bool = False) -> np.ndarray:
@@ -137,7 +151,8 @@ def train(word_map: Dict[str, Dict[str, np.ndarray]], plot_graph: bool = False) 
 
     total_loss = []
     for i in tqdm.tqdm(range(EPOCHS)):
-        epoch_loss = 0
+        epoch_loss = 0.
+        ms = vs = (0., 0.)
 
         np.random.shuffle(words)
         for word in words:
@@ -145,7 +160,7 @@ def train(word_map: Dict[str, Dict[str, np.ndarray]], plot_graph: bool = False) 
             word_vector = word_dict["input"]
             word_context = word_dict["context"]
 
-            hyperparameters, word_loss = one_word_iteration(word_vector, word_context, hyperparameters)
+            hyperparameters, word_loss, ms, vs = one_word_iteration(word_vector, word_context, hyperparameters, ms, vs)
             epoch_loss += word_loss
 
         total_loss.append(epoch_loss)

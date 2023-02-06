@@ -13,5 +13,6 @@ CONTEXT_WINDOW = TEXT_PREPROC["context_window"]
 SELF_CONTEXT = TEXT_PREPROC["self_context"]
 
 VECTOR_SPACE_SIZE = NEURAL_NETWORK["vector_space_size"]
+OPTIMIZER = NEURAL_NETWORK["optimizer"]
 LEARN_RATE = NEURAL_NETWORK["learn_rate"]
 EPOCHS = NEURAL_NETWORK["epochs"]
