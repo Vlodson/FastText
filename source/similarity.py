@@ -61,7 +61,7 @@ def embed_word(word: str, ngram_vectors: Dict[str, np.ndarray], vector_space: np
     if type(word_vectorized) == int:
         return -1
 
-    embedded = np.sum(vector_space * word_vectorized.reshape(-1, 1), axis=1) / np.sum(word_vectorized != 0)
+    embedded = np.sum(vector_space * word_vectorized.reshape(-1, 1), axis=0) / np.sum(word_vectorized != 0)
     return embedded.reshape(1, -1)
 
 
@@ -82,7 +82,7 @@ def word_similarity(word: str, word_map: Dict[str, Dict[str, np.ndarray]], ngram
     embedded_word = embed_word(word, ngram_vectors, vector_space)
 
     if type(embedded_word) == int:
-        raise Exception(f"Word {word} can't be embedded")
+        raise Exception(f"Word \"{word}\" can't be embedded")
 
     similarities = {}
     for dict_word in word_map.keys():
@@ -93,10 +93,10 @@ def word_similarity(word: str, word_map: Dict[str, Dict[str, np.ndarray]], ngram
 
 
 def main():
-    ngram_map, context_map, ngram_vectors, word_map = preprocess_corpus(CORPUS_PATH)
-    vector_space = train(word_map, True)
+    ngram_map, context_map, ngram_vectors, word_vectors, word_map = preprocess_corpus(CORPUS_PATH)
+    vector_space = train(word_map)
     word = [*word_map.keys()][0]
-    print(word_similarity("kise", word_map, ngram_vectors, vector_space))
+    print(word_similarity("pera", word_map, ngram_vectors, vector_space))
 
 
 if __name__ == '__main__':

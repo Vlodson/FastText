@@ -23,10 +23,16 @@ text_preprocessing:
 neural_network:
 
   # the size of the vector space that is being trained
-  vector_space_size: 300
+  vector_space_size: 200
 
-  # learn_rate for the GD optimization
-  learn_rate: 1.0e-3
+  # optimizer parameters
+  optimizer:
+    omega1: 0.9
+    omega2: 0.99
+    norm: 1.0e-8
+
+  # learn_rate for the optimization
+  learn_rate: 1.0e-1
 
   # training epochs
   epochs: 1000
