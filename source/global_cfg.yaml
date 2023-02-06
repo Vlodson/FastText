@@ -2,7 +2,7 @@
 text_preprocessing:
 
   # path to corpus you want to preprocess
-  corpus_path: "../texts/structure_test.txt"
+  corpus_path: "../texts/context_test.txt"
 
   # path to txt file with comma separated stopwords
   stopwords_path: "../texts/english_stopwords.txt"
@@ -12,8 +12,8 @@ text_preprocessing:
 
   # number of words to the left and right of the current word to look at as context
   context_window:
-    left: 0
-    right: 0
+    left: 1
+    right: 1
 
   # keep input word in context as well
   self_context: True
@@ -23,7 +23,7 @@ text_preprocessing:
 neural_network:
 
   # the size of the vector space that is being trained
-  vector_space_size: 300
+  vector_space_size: 200
 
   # optimizer parameters
   optimizer:
@@ -32,7 +32,7 @@ neural_network:
     norm: 1.0e-8
 
   # learn_rate for the optimization
-  learn_rate: 1.0e-3
+  learn_rate: 1.0e-1
 
   # training epochs
-  epochs: 100
+  epochs: 1000

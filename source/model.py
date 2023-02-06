@@ -33,13 +33,14 @@ def softmax(tensor: np.ndarray) -> np.ndarray:
     return exps / sums
 
 
-def make_network_hyperparameters(input_size: int, vector_space_size: int) -> Tuple[np.ndarray, np.ndarray]:
+def make_network_hyperparameters(input_size: int, vector_space_size: int,
+                                 output_size: int) -> Tuple[np.ndarray, np.ndarray]:
     """
     Initializes random weights and biases for the network
     Returns a pair of weights, input-hidden and hidden-output
     """
     input_2_hidden = np.random.uniform(-1, 1, size=(input_size, vector_space_size))
-    hidden_2_output = np.random.uniform(-1, 1, size=(vector_space_size, input_size))
+    hidden_2_output = np.random.uniform(-1, 1, size=(vector_space_size, output_size))
     return input_2_hidden, hidden_2_output
 
 
@@ -147,7 +148,11 @@ def train(word_map: Dict[str, Dict[str, np.ndarray]], plot_graph: bool = False) 
     plot_graph - whether to plot the loss graph
     """
     words = [*word_map.keys()]
-    hyperparameters = make_network_hyperparameters(word_map[words[0]]["input"].shape[1], VECTOR_SPACE_SIZE)
+    hyperparameters = make_network_hyperparameters(
+        word_map[words[0]]["input"].shape[1],
+        VECTOR_SPACE_SIZE,
+        word_map[words[0]]["context"].shape[1]
+    )
 
     total_loss = []
     for i in tqdm.tqdm(range(EPOCHS)):

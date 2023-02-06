@@ -139,6 +139,22 @@ def make_ngram_vector_map(ngram_map: Dict[str, List[str]]) -> Dict[str, np.ndarr
     return ngram_vector_map
 
 
+def make_word_vector_map(word_list: List[str]) -> Dict[str, np.ndarray]:
+    """
+    Given the list of words, one hot encodes them all
+    """
+    unique_words = np.unique(word_list)
+    unique_words_number = unique_words.shape[0]
+
+    word_vector_map = {}
+    for i, word in enumerate(unique_words):
+        word_vector = np.zeros(shape=(1, unique_words_number), dtype=float)
+        word_vector[0, i] = 1.
+        word_vector_map[word] = word_vector
+
+    return word_vector_map
+
+
 def word_to_vector(ngram_list: List[str], ngram_vector_map: Dict[str, np.ndarray]) -> np.ndarray:
     """
     Given a list of ngrams of a word, returns the vector representing that word based on ngrams
@@ -147,15 +163,16 @@ def word_to_vector(ngram_list: List[str], ngram_vector_map: Dict[str, np.ndarray
     return np.sum(itemgetter(*ngram_list)(ngram_vector_map), axis=0).reshape(1, -1)
 
 
-def context_to_target(context_vectors: List[np.ndarray]) -> np.ndarray:
+def make_context_matrix(context_list: List[str], word_vector_map: Dict[str, np.ndarray]) -> np.ndarray:
     """
-    Given context words returns an array representing the target(s) for the input word
+    Creates context matrix for given a list of the words context words
     """
-    return np.vstack(context_vectors)
+    return np.vstack([word_vector_map[word] for word in context_list])
 
 
 def make_word_map(word_list: List[str], ngram_map: Dict[str, List[str]], context_map: Dict[str, List[str]],
-                  ngram_vectors: Dict[str, np.ndarray]) -> Dict[str, Dict[str, np.ndarray]]:
+                  ngram_vectors: Dict[str, np.ndarray],
+                  word_vector_map: Dict[str, np.ndarray]) -> Dict[str, Dict[str, np.ndarray]]:
     """
     Maps the input vector as well as the target matrix to their respective words
 
@@ -168,9 +185,7 @@ def make_word_map(word_list: List[str], ngram_map: Dict[str, List[str]], context
         context = context_map[word]
 
         input_vector = word_to_vector(ngrams, ngram_vectors)
-        target_matrix = context_to_target(
-            [word_to_vector(ngram_map[context_word], ngram_vectors) for context_word in context]
-        )
+        target_matrix = make_context_matrix(context, word_vector_map)
 
         single_entry["input"] = input_vector
         single_entry["context"] = target_matrix
@@ -181,19 +196,20 @@ def make_word_map(word_list: List[str], ngram_map: Dict[str, List[str]], context
 
 
 def make_maps(word_list: List[str]) -> Tuple[Dict[str, List[str]], Dict[str, List[str]], Dict[str, np.ndarray],
-                                             Dict[str, Dict[str, np.ndarray]]]:
+                                             Dict[str, np.ndarray], Dict[str, Dict[str, np.ndarray]]]:
     """
     Makes all the needed maps for later use in the network.
 
-    Returns ngram, context, ngram_vector and word maps
+    Returns ngram, context, ngram_vector, word_vector and word maps
     """
     ngram_map = make_ngram_map(word_list, NGRAM_SIZE)
     context_map = make_context_map(word_list, left_context_window=CONTEXT_WINDOW["left"],
                                    right_context_window=CONTEXT_WINDOW["right"])
     ngram_vectors = make_ngram_vector_map(ngram_map)
-    word_map = make_word_map(word_list, ngram_map, context_map, ngram_vectors)
+    word_vectors = make_word_vector_map(word_list)
+    word_map = make_word_map(word_list, ngram_map, context_map, ngram_vectors, word_vectors)
 
-    return ngram_map, context_map, ngram_vectors, word_map
+    return ngram_map, context_map, ngram_vectors, word_vectors, word_map
 
 
 def preprocess_corpus(corpus_path: str) -> Tuple[Dict[str, List[str]], Dict[str, List[str]], Dict[str, np.ndarray],
