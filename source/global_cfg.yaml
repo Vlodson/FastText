@@ -1,0 +1,32 @@
+# parameters for the text_preprocessing part
+text_preprocessing:
+
+  # path to corpus you want to preprocess
+  corpus_path: "../texts/context_test.txt"
+
+  # path to txt file with comma separated stopwords
+  stopwords_path: "../texts/english_stopwords.txt"
+
+  # size of a single ngram
+  ngram_size: 3
+
+  # number of words to the left and right of the current word to look at as context
+  context_window:
+    left: 1
+    right: 1
+
+  # keep input word in context as well
+  self_context: True
+
+
+# parameters for the neural network model
+neural_network:
+
+  # the size of the vector space that is being trained
+  vector_space_size: 300
+
+  # learn_rate for the GD optimization
+  learn_rate: 1.0e-3
+
+  # training epochs
+  epochs: 1000
