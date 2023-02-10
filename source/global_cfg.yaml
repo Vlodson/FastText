@@ -2,7 +2,7 @@
 text_preprocessing:
 
   # path to corpus you want to preprocess
-  corpus_path: "../texts/structure_test.txt"
+  corpus_path: "../texts/context_test.txt"
 
   # path to txt file with comma separated stopwords
   stopwords_path: "../texts/english_stopwords.txt"
