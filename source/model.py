@@ -2,7 +2,7 @@ import tqdm
 import numpy as np
 import matplotlib.pyplot as plt
 
-from typing import List, Tuple, Dict
+from typing import Tuple, Dict, Callable
 from operator import itemgetter
 
 from text_preprocesssing import preprocess_corpus
@@ -18,7 +18,38 @@ def relu(tensor: np.ndarray) -> np.ndarray:
 
 
 def relu_derivative(tensor: np.ndarray) -> np.ndarray:
+    """
+    Does the derivative of relu
+    """
     return 1. * (tensor > 0.)
+
+
+def tanh(tensor: np.ndarray) -> np.ndarray:
+    """
+    Does the hyperbolic tan elementwise on tensor
+    """
+    return np.tanh(tensor)
+
+
+def tanh_derivative(tensor: np.ndarray) -> np.ndarray:
+    """
+    Does the derivative of tanh
+    """
+    return 1 - tanh(tensor)**2
+
+
+def identity(tensor: np.ndarray) -> np.ndarray:
+    """
+    Does the y = x function on a tensor
+    """
+    return tensor
+
+
+def identity_derivative(tensor: np.ndarray) -> np.ndarray:
+    """
+    Does the derivative of the identity function
+    """
+    return np.ones_like(tensor)
 
 
 def softmax(tensor: np.ndarray) -> np.ndarray:
@@ -44,7 +75,8 @@ def make_network_hyperparameters(input_size: int, vector_space_size: int,
     return input_2_hidden, hidden_2_output
 
 
-def forward_one_word(word_vector: np.ndarray, network_hyperparams: Tuple[np.ndarray, np.ndarray])\
+def forward_one_word(word_vector: np.ndarray, network_hyperparams: Tuple[np.ndarray, np.ndarray],
+                     activation: Callable[[np.ndarray], np.ndarray])\
         -> Tuple[Tuple[np.ndarray, np.ndarray], Tuple[np.ndarray, np.ndarray]]:
     """
     Does the forward pass for one word of the network.
@@ -56,7 +88,7 @@ def forward_one_word(word_vector: np.ndarray, network_hyperparams: Tuple[np.ndar
     input_2_hidden_weights, hidden_2_output_weights = network_hyperparams
 
     input_2_hidden_transfer = word_vector @ input_2_hidden_weights
-    input_2_hidden_activation = relu(input_2_hidden_transfer)
+    input_2_hidden_activation = activation(input_2_hidden_transfer)
 
     hidden_2_output_transfer = input_2_hidden_activation @ hidden_2_output_weights
     hidden_2_output_activation = softmax(hidden_2_output_transfer)
@@ -66,7 +98,8 @@ def forward_one_word(word_vector: np.ndarray, network_hyperparams: Tuple[np.ndar
 
 def backward_one_word(word_vector: np.ndarray, context_matrix: np.ndarray,
                       forward_results: Tuple[Tuple[np.ndarray, np.ndarray], Tuple[np.ndarray, np.ndarray]],
-                      network_hyperparams: Tuple[np.ndarray, np.ndarray]) -> Tuple[np.ndarray, np.ndarray]:
+                      network_hyperparams: Tuple[np.ndarray, np.ndarray],
+                      activation_derivative: Callable[[np.ndarray], np.ndarray]) -> Tuple[np.ndarray, np.ndarray]:
     """
     Takes the word vector it's working on currently, as well as its context.
     Also, the results for all steps in the forward pass and the weights for each layer
@@ -82,7 +115,7 @@ def backward_one_word(word_vector: np.ndarray, context_matrix: np.ndarray,
     grad_hidden_2_output_weights = input_2_hidden_activation.T @ grad_hidden_2_output_transfer
 
     grad_input_2_hidden_activation = grad_hidden_2_output_transfer @ hidden_2_output_weights.T
-    grad_input_2_hidden_transfer = grad_input_2_hidden_activation * relu_derivative(input_2_hidden_transfer)
+    grad_input_2_hidden_transfer = grad_input_2_hidden_activation * activation_derivative(input_2_hidden_transfer)
     grad_input_2_hidden_weights = word_vector.T @ grad_input_2_hidden_transfer
 
     return grad_input_2_hidden_weights, grad_hidden_2_output_weights
@@ -122,12 +155,13 @@ def one_word_iteration(word_vector: np.ndarray, context_matrix: np.ndarray,
 
     Returns the new hyperparameters and loss for that word, as well as the newly calculated optimizer parameters
     """
-    forward_results = forward_one_word(word_vector, network_hyperparameters)
+    forward_results = forward_one_word(word_vector, network_hyperparameters, tanh)
 
     _, (_, hidden_2_output_activation) = forward_results
     loss = loss_one_word(hidden_2_output_activation, context_matrix)
 
-    grad_hyperparameters = backward_one_word(word_vector, context_matrix, forward_results, network_hyperparameters)
+    grad_hyperparameters = backward_one_word(word_vector, context_matrix, forward_results,
+                                             network_hyperparameters, tanh_derivative)
 
     input_2_hidden_updated, hidden_2_output_updated = tuple(
         update_hyperparameter(hyperparameter, grad_hyperparameter, m, v)

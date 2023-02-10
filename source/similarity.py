@@ -61,8 +61,8 @@ def embed_word(word: str, ngram_vectors: Dict[str, np.ndarray], vector_space: np
     if type(word_vectorized) == int:
         return -1
 
-    embedded = np.sum(vector_space * word_vectorized.reshape(-1, 1), axis=0) / np.sum(word_vectorized != 0)
-    return embedded.reshape(1, -1)
+    embedded = word_vectorized @ vector_space
+    return embedded
 
 
 def vector_cosine_similarity(vector1: np.ndarray, vector2: np.ndarray) -> float:
