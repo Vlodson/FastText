@@ -70,7 +70,10 @@ def vector_cosine_similarity(vector1: np.ndarray, vector2: np.ndarray) -> float:
     Does cosine similarity (from formula of vector product)
     Return interval is -1 to 1 with 1 being same and -1 being completely different
     """
-    return vector1 @ vector2.T / (np.linalg.norm(vector1) * np.linalg.norm(vector2))
+    similarity = vector1 @ vector2.T / (np.linalg.norm(vector1) * np.linalg.norm(vector2))
+
+    # due to mat mul the result is a shape(1, 1) np array and not a float, so indexing is needed
+    return similarity[0, 0]
 
 
 def word_similarity(word: str, word_map: Dict[str, Dict[str, np.ndarray]], ngram_vectors: Dict[str, np.ndarray],
@@ -95,7 +98,7 @@ def word_similarity(word: str, word_map: Dict[str, Dict[str, np.ndarray]], ngram
 
 def main():
     ngram_map, context_map, ngram_vectors, word_vectors, word_map = preprocess_corpus(CORPUS_PATH)
-    vector_space = train(word_map, True)
+    vector_space = train(word_map, False)
     word = [*word_map.keys()][0]
     print(word_similarity("pera", word_map, ngram_vectors, vector_space))
 
