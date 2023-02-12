@@ -2,9 +2,8 @@ import numpy as np
 
 from typing import List, Dict, Tuple, Union
 
-from globals import NGRAM_SIZE, CORPUS_PATH
-from text_preprocesssing import preprocess_corpus, word_to_vector
-from model import train
+from globals import NGRAM_SIZE
+from text_preprocesssing import word_to_vector
 
 
 def make_ngram_list_from_word(word: str) -> List[str]:
@@ -94,14 +93,3 @@ def word_similarity(word: str, word_map: Dict[str, Dict[str, np.ndarray]], ngram
         similarities[dict_word] = vector_cosine_similarity(embedded_word, embedded_dict_word)
 
     return word, similarities
-
-
-def main():
-    ngram_map, context_map, ngram_vectors, word_vectors, word_map = preprocess_corpus(CORPUS_PATH)
-    vector_space = train(word_map, False)
-    word = [*word_map.keys()][0]
-    print(word_similarity("pera", word_map, ngram_vectors, vector_space))
-
-
-if __name__ == '__main__':
-    main()

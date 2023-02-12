@@ -5,8 +5,7 @@ import matplotlib.pyplot as plt
 from typing import Tuple, Dict, Callable
 from operator import itemgetter
 
-from text_preprocesssing import preprocess_corpus
-from globals import CORPUS_PATH, VECTOR_SPACE_SIZE, OPTIMIZER, LEARN_RATE, EPOCHS
+from globals import VECTOR_SPACE_SIZE, OPTIMIZER, LEARN_RATE, EPOCHS
 
 
 def relu(tensor: np.ndarray) -> np.ndarray:
@@ -209,13 +208,3 @@ def train(word_map: Dict[str, Dict[str, np.ndarray]], plot_graph: bool = False) 
         plt.show()
 
     return hyperparameters[0]
-
-
-def main():
-    maps = preprocess_corpus(CORPUS_PATH)
-    vector_space = train(maps[-1], True)
-    print(vector_space)
-
-
-if __name__ == '__main__':
-    main()

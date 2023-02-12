@@ -285,6 +285,12 @@ poetry.toml
 
 # End of https://www.toptal.com/developers/gitignore/api/python,pycharm
 
+# ignore folders
 misc/
 texts/
 .idea/
+*saved*/
+
+# ignore files
+test*.py
+global_cfg.yaml
