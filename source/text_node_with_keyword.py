@@ -2,8 +2,9 @@ import numpy as np
 
 from typing import List, Dict, Tuple
 
-from text_preprocesssing import load_corpus, clean_text, make_word_list, remove_stopwords
+from text_preprocesssing import clean_text, make_word_list, remove_stopwords
 from similarity import embed_word, vector_cosine_similarity
+from io_utils import open_corpus
 from globals import STOPWORDS_PATH
 
 
@@ -11,7 +12,7 @@ def make_node_word_list(node_path: str) -> List[str]:
     """
     Makes a list of words from the text node that needs to be processed
     """
-    text = load_corpus(node_path)
+    text = open_corpus(node_path)
     text = clean_text(text)
     word_list = make_word_list(text)
     word_list = remove_stopwords(word_list, STOPWORDS_PATH)

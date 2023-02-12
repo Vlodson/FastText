@@ -6,16 +6,7 @@ from typing import List, Dict, Tuple
 from operator import itemgetter
 
 from globals import CORPUS_PATH, STOPWORDS_PATH, NGRAM_SIZE, CONTEXT_WINDOW, SELF_CONTEXT
-
-
-def load_corpus(corpus_path: str) -> str:
-    """
-    Loads corpus text from text file with path corpus_path 
-    """
-    with open(corpus_path, 'r') as f:
-        corpus = f.read()
-
-    return corpus
+from io_utils import open_corpus
 
 
 def remove_white_space(text: str) -> str:
@@ -217,7 +208,7 @@ def preprocess_corpus(corpus_path: str) -> Tuple[Dict[str, List[str]], Dict[str,
     """
     Given the path to the corpus, create dataset that will later be used in the NN
     """
-    text = load_corpus(corpus_path)
+    text = open_corpus(corpus_path)
     text = clean_text(text)
     word_list = make_word_list(text)
     word_list = remove_stopwords(word_list, STOPWORDS_PATH)

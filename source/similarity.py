@@ -2,9 +2,8 @@ import numpy as np
 
 from typing import List, Dict, Tuple, Union
 
-from globals import NGRAM_SIZE, CORPUS_PATH
-from text_preprocesssing import preprocess_corpus, word_to_vector
-from model import train
+from globals import NGRAM_SIZE
+from text_preprocesssing import word_to_vector
 
 
 def make_ngram_list_from_word(word: str) -> List[str]:

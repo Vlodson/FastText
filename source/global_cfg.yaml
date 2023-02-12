@@ -36,3 +36,22 @@ neural_network:
 
   # training epochs
   epochs: 100
+
+
+# input/output file paths and params
+io:
+
+  # project root
+  root: "../"
+
+  # directory in which to save all the files
+  save_dir: "saved_params"
+
+  # pickle file name for saved vector space
+  vector_space_file: "vector_space.pkl"
+
+  # pickle file name for saved ngram vectors
+  ngram_vectors_file: "ngram_vectors.pkl"
+
+  # pickle file name for saved word map
+  word_map_file: "word_map.pkl"

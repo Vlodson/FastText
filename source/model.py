@@ -5,8 +5,7 @@ import matplotlib.pyplot as plt
 from typing import Tuple, Dict, Callable
 from operator import itemgetter
 
-from text_preprocesssing import preprocess_corpus
-from globals import CORPUS_PATH, VECTOR_SPACE_SIZE, OPTIMIZER, LEARN_RATE, EPOCHS
+from globals import VECTOR_SPACE_SIZE, OPTIMIZER, LEARN_RATE, EPOCHS
 
 
 def relu(tensor: np.ndarray) -> np.ndarray:
