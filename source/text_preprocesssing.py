@@ -215,11 +215,3 @@ def preprocess_corpus(corpus_path: str) -> Tuple[Dict[str, List[str]], Dict[str,
     maps = make_maps(word_list)
 
     return maps
-
-
-def main():
-    maps = preprocess_corpus(CORPUS_PATH)
-
-
-if __name__ == '__main__':
-    main()
