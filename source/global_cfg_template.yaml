@@ -1,4 +1,4 @@
-# DO NOT MODIFY THIS FILE. INSTEAD ADD global_cfg.yaml AND CHANGE IT.
+# DO NOT MODIFY THIS FILE. INSTEAD, ADD global_cfg.yaml AND CHANGE IT.
 
 # parameters for the text_preprocessing part
 text_preprocessing:
