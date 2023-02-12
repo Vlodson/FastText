@@ -24,7 +24,6 @@ def __check_dirs() -> None:
 def serialize_object(obj: Any, path: str) -> None:
     """
     Serializes object to pickle file
-    Assumes path is exists.
     """
     __check_dirs()
     with open(path, 'wb') as f:

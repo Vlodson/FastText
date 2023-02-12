@@ -46,7 +46,7 @@ io:
   # project root
   root: "../"
 
-  # directory in which to save all the files
+  # directory in which to save all the files, preferably with save in it for .gitignore to catch it
   save_dir: "saved_params"
 
   # pickle file name for saved vector space
