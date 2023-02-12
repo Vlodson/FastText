@@ -292,3 +292,4 @@ texts/
 
 # ignore files
 test*.py
+global_cfg.yaml
