@@ -209,13 +209,3 @@ def train(word_map: Dict[str, Dict[str, np.ndarray]], plot_graph: bool = False) 
         plt.show()
 
     return hyperparameters[0]
-
-
-def main():
-    maps = preprocess_corpus(CORPUS_PATH)
-    vector_space = train(maps[-1], True)
-    print(vector_space)
-
-
-if __name__ == '__main__':
-    main()
