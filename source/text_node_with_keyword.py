@@ -3,7 +3,8 @@ import numpy as np
 from typing import List, Dict, Tuple
 
 from text_preprocesssing import clean_text, make_word_list, remove_stopwords
-from similarity import embed_word, vector_cosine_similarity
+from embedding import embed_word
+from similarity import vector_cosine_similarity
 from io_utils import open_corpus
 from globals import STOPWORDS_PATH
 
