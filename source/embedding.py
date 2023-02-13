@@ -1,3 +1,5 @@
+import numpy as np
+
 from typing import List, Dict, Union
 
 from globals import NGRAM_SIZE
@@ -60,3 +62,13 @@ def embed_word(word: str, ngram_vectors: Dict[str, np.ndarray], vector_space: np
 
     embedded = word_vectorized @ vector_space
     return embedded
+
+
+def embed_word_map(word_map: Dict[str, Dict[str, np.ndarray]], ngram_vectors: Dict[str, np.ndarray],
+                   vector_space: np.ndarray) -> Dict[str, np.ndarray]:
+    """
+    Embeds the word map made in text preprocessing.
+
+    Returns a dict where the keys are the words and values are their embedded vectors.
+    """
+    return {word: embed_word(word, ngram_vectors, vector_space) for word in word_map.keys()}
