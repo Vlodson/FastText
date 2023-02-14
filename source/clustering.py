@@ -26,6 +26,6 @@ def embedded_word_map_kmeans_clustering(embedded_word_map: Dict[str, np.ndarray]
     Returns a dict with words from the word map as keys and their labels as values
     """
     data = np.vstack([*embedded_word_map.values()])
-    kmeans = KMeans(n_clusters=KMEANS["clusters"]).fit(data)
+    kmeans = KMeans(n_clusters=KMEANS["clusters"], n_init=KMEANS["n_times"]).fit(data)
     labels = kmeans.labels_
     return {word: label for word, label in zip(embedded_word_map.keys(), labels)}, kmeans
