@@ -1,7 +1,7 @@
-import numpy as np
 import os
-
 from typing import List, Dict, Tuple
+
+import numpy as np
 
 from .text_preprocesssing import clean_text, make_word_list, remove_stopwords
 from .embedding import embed_word
@@ -40,18 +40,20 @@ def _keywords_similarity(
     Returns a dict with keys being keywords and values being dicts with node words as keys and their cosine
     similarity as values.
     """
-    # I don't think there's a way to not do this twice and still keep it as a generator, luckily it's a quick operation
-    # this removes all the ones that couldn't be embedded in this context
     embedded_keywords = {
-        keyword: embed_word(keyword, ngram_vectors, vector_space)
+        keyword: embedding
         for keyword in keywords
-        if type(embed_word(keyword, ngram_vectors, vector_space)) != int
+        if not isinstance(
+            embedding := embed_word(keyword, ngram_vectors, vector_space), int
+        )
     }
 
     embedded_node_words = {
-        word: embed_word(word, ngram_vectors, vector_space)
+        word: embedding
         for word in node_word_list
-        if type(embed_word(word, ngram_vectors, vector_space)) != int
+        if not isinstance(
+            embedding := embed_word(word, ngram_vectors, vector_space), int
+        )
     }
 
     keyword_similarities = {
