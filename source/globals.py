@@ -6,6 +6,7 @@ with open("global_cfg.yaml", 'r') as f:
 TEXT_PREPROC = GLOBAL_CFG["text_preprocessing"]
 NEURAL_NETWORK = GLOBAL_CFG["neural_network"]
 IO = GLOBAL_CFG["io"]
+CLUSTERING = GLOBAL_CFG["clustering"]
 
 CORPUS_PATH = TEXT_PREPROC["corpus_path"]
 STOPWORDS_PATH = TEXT_PREPROC["stopwords_path"]
@@ -23,3 +24,6 @@ SAVE_DIR = IO["save_dir"]
 VECTOR_SPACE_FILE = IO["vector_space_file"]
 NGRAM_VECTORS_FILE = IO["ngram_vectors_file"]
 WORD_MAP_FILE = IO["word_map_file"]
+
+DB_SCAN = CLUSTERING["dbscan"]
+KMEANS = CLUSTERING["kmeans"]

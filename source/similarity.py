@@ -1,6 +1,7 @@
 import numpy as np
 
 from embedding import embed_word
+from typing import Dict, Tuple
 
 
 def vector_cosine_similarity(vector1: np.ndarray, vector2: np.ndarray) -> float:
@@ -26,9 +27,10 @@ def word_similarity(word: str, word_map: Dict[str, Dict[str, np.ndarray]], ngram
     if type(embedded_word) == int:
         raise Exception(f"Word \"{word}\" can't be embedded")
 
-    similarities = {}
-    for dict_word in word_map.keys():
-        embedded_dict_word = embed_word(dict_word, ngram_vectors, vector_space)
-        similarities[dict_word] = vector_cosine_similarity(embedded_word, embedded_dict_word)
+    similarities = {
+        dict_word:
+            vector_cosine_similarity(embedded_word, embed_word(dict_word, ngram_vectors, vector_space))
+        for dict_word in word_map.keys()
+    }
 
     return word, similarities
