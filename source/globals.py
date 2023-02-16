@@ -1,6 +1,6 @@
 import yaml
 
-with open("global_cfg.yaml", 'r') as f:
+with open("global_cfg.yaml", "rb") as f:
     GLOBAL_CFG = yaml.safe_load(f)
 
 TEXT_PREPROC = GLOBAL_CFG["text_preprocessing"]
