@@ -36,7 +36,7 @@ def word_similarity(
 
     similarities = {
         dict_word: vector_cosine_similarity(
-            embedded_word, embed_word(dict_word, ngram_vectors, vector_space)
+            embedded_word, embed_word(dict_word, ngram_vectors, vector_space)  # type: ignore
         )
         for dict_word in word_map.keys()
     }

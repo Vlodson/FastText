@@ -147,7 +147,7 @@ def loss_one_word(word_output: np.ndarray, context_matrix: np.ndarray) -> float:
     Calculates log loss for a single word based on its output and context
     """
     loss = np.sum(-1 * (context_matrix * np.log(word_output)))
-    return loss / context_matrix.shape[0]
+    return loss / context_matrix.shape[0]  # type: ignore
 
 
 def update_hyperparameter(
@@ -246,7 +246,7 @@ def train(
             word_context = word_dict["context"]
 
             hyperparameters, word_loss, ms, vs = one_word_iteration(
-                word_vector, word_context, hyperparameters, ms, vs
+                word_vector, word_context, hyperparameters, ms, vs  # type: ignore
             )
             epoch_loss += word_loss
 

@@ -67,7 +67,7 @@ def embed_word(
     """
     word_vectorized = word_vector(word, ngram_vectors)
 
-    if type(word_vectorized) == int:
+    if isinstance(word_vectorized, int):
         return -1
 
     embedded = word_vectorized @ vector_space
@@ -86,4 +86,4 @@ def embed_word_map(
     """
     return {
         word: embed_word(word, ngram_vectors, vector_space) for word in word_map.keys()
-    }
+    }  # type: ignore

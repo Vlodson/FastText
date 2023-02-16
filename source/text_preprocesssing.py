@@ -242,6 +242,7 @@ def preprocess_corpus(
     Dict[str, List[str]],
     Dict[str, List[str]],
     Dict[str, np.ndarray],
+    Dict[str, np.ndarray],
     Dict[str, Dict[str, np.ndarray]],
 ]:
     """
