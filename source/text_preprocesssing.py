@@ -21,7 +21,7 @@ def remove_numbers(text: str) -> str:
     """
     Removes all numbers in text
     """
-    cleaned_text = re.sub(r"[1-9]+", ' ', text)
+    cleaned_text = re.sub(r"[0-9]+", '', text)
     return cleaned_text
 
 
