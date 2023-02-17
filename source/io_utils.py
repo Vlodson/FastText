@@ -46,7 +46,7 @@ def open_corpus(path: str) -> str:
     Opens a corpus and loads its content into a string.
     Assumes path is exists.
     """
-    with open(path, 'r') as f:
+    with open(path, 'r', encoding='utf-8') as f:
         content = f.read()
 
     return content
