@@ -59,23 +59,23 @@ io:
   word_map_file: "word_map.pkl"
 
 
-  # clustering parameters
-  clustering:
+# clustering parameters
+clustering:
 
-    # parameters for the db scan clustering algorithm
-    dbscan:
+  # parameters for the db scan clustering algorithm
+  dbscan:
 
-      # maximum distance score between points
-      eps: 0.5
+    # maximum distance score between points
+    eps: 0.5
 
-      # minimum points in one cluster
-      min_samples: 5
+    # minimum points in one cluster
+    min_samples: 5
 
-    # parameters for the k means clustering algorithm
-    kmeans:
+  # parameters for the k means clustering algorithm
+  kmeans:
 
-      # exact number of clusters the model should return
-      clusters: 5
+    # exact number of clusters the model should return
+    clusters: 5
 
-      # number of times the kmeans algo is run with new centroids
-      n_times: 10
+    # number of times the kmeans algo is run with new centroids
+    n_times: 10
