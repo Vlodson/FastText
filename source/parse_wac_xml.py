@@ -2,6 +2,8 @@ from bs4 import Tag
 from bs4 import BeautifulSoup
 import re
 
+from globals import CORPUS_PATH
+
 
 def parse_body(body: Tag) -> str:
     text = body.contents[0]
@@ -34,7 +36,7 @@ def parse_xml(xml_path: str) -> str:
 
 def main():
     corpus = parse_xml("../../WaC/srWaC1.1.06_short.xml")
-    with open('../texts/serbian_corpus_150k.txt', 'w', encoding='utf-8') as f:
+    with open(CORPUS_PATH, 'w', encoding='utf-8') as f:
         f.write(corpus)
 
 

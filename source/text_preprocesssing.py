@@ -65,7 +65,7 @@ def remove_stopwords(word_list: List[str], stopwords_path: str) -> List[str]:
     Stopwords path is the path to the comma separated stopwords.
     """
     # preprocess stopwords
-    with open(stopwords_path, 'r') as f:
+    with open(stopwords_path, 'r', encoding='utf-8') as f:
         stopwords = f.read()
     stopwords = stopwords.split(',')
 
