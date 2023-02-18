@@ -10,15 +10,14 @@ from dimension_reduction import reduce_dims_tsne
 pio.renderers.default = "browser"
 
 
-def plot_embedded_word_map_3d(embedded_word_map: Dict[str, np.ndarray]) -> None:
+def plot_embedded_word_map_3d(embedded_word_map_3d: Dict[str, np.ndarray]) -> None:
     """
-    Plots embedded word map in 3D space by reducing dimensions with TSNE
+    Plots embedded word map in 3D space
     """
-    tsne_data = reduce_dims_tsne(embedded_word_map)
-
     # need to make a pd like dict that can be plotted nicely
     reduced_word_map = {
-        i: [data[0], data[1], data[2], word] for i, (word, data) in enumerate(zip(embedded_word_map.keys(), tsne_data))
+        i: [data[0], data[1], data[2], word]
+        for i, (word, data) in enumerate(zip(embedded_word_map_3d.keys(), embedded_word_map_3d.values()))
     }
 
     df = pd.DataFrame.from_dict(
@@ -29,15 +28,14 @@ def plot_embedded_word_map_3d(embedded_word_map: Dict[str, np.ndarray]) -> None:
     fig.show()
 
 
-def plot_clustered_word_map_3d(embedded_word_map: Dict[str, np.ndarray], labeled_word_map: Dict[str, int]) -> None:
+def plot_clustered_word_map_3d(embedded_word_map_3d: Dict[str, np.ndarray], labeled_word_map: Dict[str, int]) -> None:
     """
-    Plots the clusters of the embedded word map in 3D, reduced by TSNE
+    Plots the clusters of the embedded word map in 3D
     """
-    tsne_data = reduce_dims_tsne(embedded_word_map)
-
     reduced_word_map = {
         i: [data[0], data[1], data[2], word, label]
-        for i, (word, data, label) in enumerate(zip(embedded_word_map.keys(), tsne_data, labeled_word_map.values()))
+        for i, (word, data, label)
+        in enumerate(zip(embedded_word_map_3d.keys(), embedded_word_map_3d.values(), labeled_word_map.values()))
     }
 
     df = pd.DataFrame.from_dict(
