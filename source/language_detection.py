@@ -90,24 +90,3 @@ def calculate_language_confidence(unknown_corpus: str, ngram_size: int, language
     unknown_language_dist = standardize_distributions(ngram_count)
 
     return kl_divergence(unknown_language_dist, known_language_dist)
-
-
-def main():
-    known = ["pera", "voli", "da", "igra", "kosarku", "sa", "perom"]
-    unknown = ["pera", "voli", "da", "igra", "kosarku", "sa", "perom"]
-
-    kn_ngrams = word_list_to_ngram_list(known, 3)
-    kn_ngrams = count_unique_ngrams(kn_ngrams)
-    kn_std = standardize_distributions(kn_ngrams)
-
-    uk_ngrams = word_list_to_ngram_list(unknown, 3)
-    uk_ngrams = count_unique_ngrams_for_unknown_lang(uk_ngrams, kn_ngrams)
-    uk_std = standardize_distributions(uk_ngrams)
-
-    err = kl_divergence(uk_std, kn_std)
-
-    print(err)
-
-
-if __name__ == "__main__":
-    main()
