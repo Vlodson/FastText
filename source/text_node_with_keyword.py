@@ -109,3 +109,10 @@ def node_has_keywords(node_text: str, keywords: List[str]) -> List[Tuple[str, bo
     keyword_in_node = _keyword_in_node(keyword_similarities)
 
     return keyword_in_node
+
+
+def text_contains_keyword(text: str, keyword: str) -> bool:
+    res = node_has_keywords(text, [keyword])
+    if res == []:
+        return False
+    return res[0][1]

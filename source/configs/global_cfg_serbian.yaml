@@ -1,0 +1,71 @@
+# parameters for the text_preprocessing part
+text_preprocessing:
+  # path to corpus you want to preprocess
+  corpus_path: "./fasttext/texts/serbian_corpus_1k.txt"
+
+  # path to txt file with comma separated stopwords
+  stopwords_path: "./fasttext/texts/serbian_stopwords.txt"
+
+  # size of a single ngram
+  ngram_size: 3
+
+  # number of words to the left and right of the current word to look at as context
+  context_window:
+    left: 2
+    right: 2
+
+  # keep input word in context as well
+  self_context: True
+
+# parameters for the neural network model
+neural_network:
+  # the size of the vector space that is being trained
+  vector_space_size: 300
+
+  # optimizer parameters
+  optimizer:
+    omega1: 0.9
+    omega2: 0.99
+    norm: 1.0e-8
+
+  # learn_rate for the optimization
+  learn_rate: 1.0e-3
+
+  # training epochs
+  epochs: 100
+
+# input/output file paths and params
+# 2l2rs-ctxt: context -ctxt, l - left, r - right, s - self, 2 - size
+io:
+  # project root
+  root: "./fasttext"
+
+  # directory in which to save all the files, preferably with save in it for .gitignore to catch it
+  save_dir: "saved_params"
+
+  # pickle file name for saved vector space
+  vector_space_file: "srb_1k_vector_space_2l2rs-ctxt.pkl"
+
+  # pickle file name for saved ngram vectors
+  ngram_vectors_file: "srb_1k_ngram_vectors_2l2rs-ctxt.pkl"
+
+  # pickle file name for saved word map
+  word_map_file: "srb_1k_word_map_2l2rs-ctxt.pkl"
+
+# clustering parameters
+clustering:
+  # parameters for the db scan clustering algorithm
+  dbscan:
+    # maximum distance score between points
+    eps: 15.
+
+    # minimum points in one cluster
+    min_samples: 2
+
+  # parameters for the k means clustering algorithm
+  kmeans:
+    # exact number of clusters the model should return
+    clusters: 100
+
+    # number of times the kmeans algo is run with new centroids
+    n_times: 10

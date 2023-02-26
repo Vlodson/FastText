@@ -294,3 +294,4 @@ texts/
 # ignore files
 test*.py
 global_cfg.yaml
+global_cfg_serbian.yml

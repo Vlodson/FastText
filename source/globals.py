@@ -1,6 +1,10 @@
+import os
+
 import yaml
 
-with open("source/global_cfg.yaml", "rb") as f:
+globals_yaml_path = os.getenv("GLOBALS_YAML_PATH", "source/global_cfg.yaml")
+
+with open(globals_yaml_path, "rb") as f:
     GLOBAL_CFG = yaml.safe_load(f)
 
 TEXT_PREPROC = GLOBAL_CFG["text_preprocessing"]
