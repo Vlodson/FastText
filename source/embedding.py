@@ -10,15 +10,11 @@ def _iter_len(str_len: int, ngrams: int) -> int:
     return str_len - (ngrams - 1) if str_len > ngrams else 1
 
 
-def make_ngram_list_from_word(word_list: List[str], ngram_size: int) -> List[str]:
+def make_ngram_list_from_word(word: str, ngram_size: int) -> List[str]:
     """
     Given a list of words, turns it into a list of ngrams from each word
     """
-    return [
-        word[i:i + ngram_size]
-        for word in word_list
-        for i in range(0, _iter_len(len(word), ngram_size))
-    ]
+    return [word[i:i + ngram_size] for i in range(0, _iter_len(len(word), ngram_size))]
 
 
 def count_missing_ngrams(word_ngram_list: List[str], ngram_vectors: Dict[str, np.ndarray]) -> int:
@@ -45,10 +41,11 @@ def word_vector(word: str, ngram_vectors: Dict[str, np.ndarray]) -> Union[np.nda
     2 was chosen because that is the minimum case for a new word that only has one ngram changed compared to its closest
     word in the dictionary
     """
-    word_ngram_list = make_ngram_list_from_word(word)
+    word_ngram_list = make_ngram_list_from_word(word, NGRAM_SIZE)
     missing = count_missing_ngrams(word_ngram_list, ngram_vectors)
 
-    if missing > 2:
+    # special cases for when there is only one ngram, and it's unknown, and same for when there are only 2 ngrams
+    if (missing > 2) or (len(word_ngram_list) == 1 and missing == 1) or (len(word_ngram_list) == 2 and missing == 2):
         return -1
 
     if missing <= 2:
