@@ -10,7 +10,7 @@ def _iter_len(str_len: int, ngrams: int) -> int:
     return str_len - (ngrams - 1) if str_len > ngrams else 1
 
 
-def word_list_to_ngram_list(word_list: List[str], ngram_size: int) -> List[str]:
+def make_ngram_list_from_word(word_list: List[str], ngram_size: int) -> List[str]:
     """
     Given a list of words, turns it into a list of ngrams from each word
     """
