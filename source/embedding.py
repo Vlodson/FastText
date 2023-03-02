@@ -6,13 +6,16 @@ from .globals import NGRAM_SIZE
 from .text_preprocesssing import word_to_vector
 
 
+def _iter_len(str_len: int, ngrams: int) -> int:
+    return str_len - (ngrams - 1) if str_len > ngrams else 1
+
+
+
 def make_ngram_list_from_word(word: str) -> List[str]:
     """
     Returns a list of ngrams as well as the word itself
     """
-    ngrams = [word[i : i + NGRAM_SIZE] for i in range(0, len(word) - (NGRAM_SIZE - 1))]
-    ngrams.append(word)
-    return ngrams
+    return [word[i:i + NGRAM_SIZE] for i in range(0, _iter_len(len(word), NGRAM_SIZE))]
 
 
 def count_missing_ngrams(
