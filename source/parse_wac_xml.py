@@ -2,7 +2,7 @@ from bs4 import Tag
 from bs4 import BeautifulSoup
 import re
 
-from globals import CORPUS_PATH
+from globals import LanguageConfig
 
 
 def parse_body(body: Tag) -> str:
@@ -36,7 +36,8 @@ def parse_xml(xml_path: str) -> str:
 
 def main():
     corpus = parse_xml("../../WaC/srWaC1.1.06_short.xml")
-    with open(CORPUS_PATH, 'w', encoding='utf-8') as f:
+    cfg = LanguageConfig(language="serbian")
+    with open(cfg.corpus_path, 'w', encoding='utf-8') as f:
         f.write(corpus)
 
 

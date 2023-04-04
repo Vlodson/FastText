@@ -1,0 +1,7 @@
+dbscan:
+
+  # maximum distance score between points
+  eps: 0.5
+
+  # minimum points in one cluster
+  min_samples: 5

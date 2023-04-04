@@ -1,0 +1,7 @@
+kmeans:
+
+  # exact number of clusters the model should return
+  clusters: 5
+
+  # number of times the kmeans algo is run with new centroids
+  n_times: 10
